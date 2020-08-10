@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>antv</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g6-3.5.10/dist/g6.min.js"></script>
+  </head>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      background:'#f0f3f6';
+    }
+    body {
+      padding:20px;
+      box-sizing: border-box;
+    }
+    #container {
+      border:1px solid #cccccc;
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+    #menu {
+      padding:0;
+      margin:0;
+      background-color: rosybrown;
+      list-style: none;
+    }
+    #menu li{
+      line-height: 30px;
+      cursor:pointer;
+    }
+    .g6-minimap {
+      position: absolute;
+      bottom:0;
+      right:0;
+      border:1px solid #cccccc;
+      border-right:none;
+      border-bottom: none;
+    }
+  </style>
+  <body>
+    <div id="container"></div>
+    <script>
+      const COLLAPSE_ICON = function COLLAPSE_ICON(x, y, r) {
+        return [
+          ["M", x - r, y - r],
+          ["a", r, r, 0, 1, 0, r * 2, 0],
+          ["a", r, r, 0, 1, 0, -r * 2, 0],
+          ["M", x + 2 - r, y - r],
+          ["L", x + r - 2, y - r],
+        ];
+      };
+      const EXPAND_ICON = function EXPAND_ICON(x, y, r) {
+        return [
+          ["M", x - r, y - r],
+          ["a", r, r, 0, 1, 0, r * 2, 0],
+          ["a", r, r, 0, 1, 0, -r * 2, 0],
+          ["M", x + 2 - r, y - r],
+          ["L", x + r - 2, y - r],
+          ["M", x, y - 2 * r + 2],
+          ["L", x, y - 2],
+        ];
+      };
+
+//初始数据
+      const data = {
+        id: "root",
+        label: "建筑",
+        status:false,
+        children: [
+          {
+            id: "c1",
+            label: "网关1",
+            status:true,
+            isAlarm:true,
+            children: [
+              {
+                id: "c1-1",
+                label: "传感器-1",
+                status:false,
+              },
+              {
+                id: "c1-2",
+                label: "传感器-2",
+                status:false,
+              },
+            ],
+          },
+          {
+            id: "c2",
+            label: "网关2",
+            status:true,
+            isAlarm:false,
+            children: [
+              {
+                id: "c2-1",
+                label: "传感器-1",
+                status:false,
+              },
+              {
+                id: "c2-2",
+                label: "传感器-2",
+                status:false,
+              },
+            ],
+          },
+          {
+            id: "c9",
+            label: "网关2",
+            status:false,
+            isAlarm:true,
+            children: [
+              {
+                id: "c9-1",
+                label: "传感器-1",
+                status:false,
+              },
+              {
+                id: "c9-2",
+                label: "传感器-2",
+                status:false,
+              },
+            ],
+          },
+          {
+            id: "c3",
+            label: "网关2",
+            isAlarm:true,
+            status:true,
+            children: [
+              {
+                id: "c3-1",
+                label: "传感器-1",
+                status:false,
+              },
+              {
+                id: "c3-2",
+                label: "传感器-2",
+                status:false,
+              },
+            ],
+          },
+        ],
+      };
+
+      G6.Util.traverseTree(data, (d) => {
+        let imgUrl;
+        if(d.id === 'root') {
+          imgUrl = "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3763885783,3147133630&fm=26&gp=0.jpg";
+        }else {
+          imgUrl = "https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=468117604,3107912712&fm=26&gp=0.jpg";
+        }
+        d.leftIcon = {
+          style: {
+            fill: "#e6fffb",//
+            stroke: "#e6fffb",
+          },
+          img:imgUrl,
+        };
+        return true;
+      });
+
+
+//注册节点
+      G6.registerNode(
+        "icon-node",
+        {
+          options: {
+            size: [60, 20],
+            stroke: "#91d5ff",
+            fill: "#91d5ff",
+          },
+//画节点
+          draw(cfg, group) {
+            const styles = this.getShapeStyle(cfg);
+            const { labelCfg = {} } = cfg;
+            const keyShape = group.addShape("rect", {
+              attrs: {
+                ...styles,
+                x: 0,
+                y: 0,
+              },
+            });
+//通讯状态
+
+            
+            if(cfg.label.indexOf('网关') != -1) {
+              group.addShape('rect',{
+                attrs:{
+                  fill:'#000',
+                  stroke:'#000',
+                  width:40,
+                  height:20,
+                  x:0,
+                  y:42,
+                  radius:2,
+                  cursor:'pointer'
+                }
+              });
+              group.addShape("text", {
+                attrs: {
+                  ...labelCfg.style,
+                  text: '重启',
+                  x: 8,
+                  y: 60,
+                  cursor:'pointer',
+                  fill:'#fff'
+                },
+                name:'reset'
+              });
+              group.addShape('rect',{
+                attrs:{
+                  fill:'green',
+                  stroke:'green',
+                  width:40,
+                  height:20,
+                  x:42,
+                  y:42,
+                  radius:2,
+                  cursor:'pointer'
+                }
+              });
+              group.addShape("text", {
+                attrs: {
+                  ...labelCfg.style,
+                  text: '跳转',
+                  x: 50,
+                  y: 60,
+                  cursor:'pointer',
+                  fill:'#fff'
+                },
+                name:'jump'
+              });
+            }
+            if(cfg.children) {
+              group.addShape("marker", {
+                attrs: {
+                  x: styles.width,
+                  y: styles.height / 1.6,
+                  r: 6,
+                  stroke: "#1890ff",
+                  fill:'#fff',
+                  cursor: "pointer",
+                  symbol:cfg.collapsed ? EXPAND_ICON : COLLAPSE_ICON,
+                  opacity:1
+                },
+                name: "collapse-icon",
+              });
+            }
+            
+            
+
+            /**
+             * leftIcon 格式如下：
+             *  {
+             *    style: ShapeStyle;
+             *    img: ''
+             *  }
+             */
+            // console.log("cfg.leftIcon", cfg.leftIcon);
+            if (cfg.leftIcon) {
+              const { style, img } = cfg.leftIcon;
+              group.addShape("rect", {
+                attrs: {
+                  x: 1,
+                  y: 1,
+                  width: 38,
+                  height: styles.height - 2,
+                  fill: "#8c8c8c",
+                  ...style,
+                },
+              });
+
+              group.addShape("image", {
+                attrs: {
+                  x: 8,
+                  y: 8,
+                  width: 24,
+                  height: 24,
+                  img:
+                    img ||
+                    "https://g.alicdn.com/cm-design/arms-trace/1.0.155/styles/armsTrace/images/TAIR.png",
+                },
+                name: "image-shape",
+              });
+
+
+              if(cfg.depth === 1) {
+                let statusColor;
+                cfg.status ? statusColor = 'green' : statusColor = 'red';
+                group.addShape('circle',{
+                  attrs:{
+                    fill:statusColor,
+                    stroke:statusColor,
+                    x:10,
+                    y:8,
+                    r:5,
+                    cursor:'pointer'
+                  },
+                    name:'off-status'
+                  });
+                }
+              }
+              
+
+            // 如果不需要动态增加或删除元素，则不需要 add 这两个 marker
+            // group.addShape("marker", {
+            //   attrs: {
+            //     x: 40,
+            //     y: 52,
+            //     r: 6,
+            //     stroke: "#73d13d",
+            //     cursor: "pointer",
+            //     symbol: EXPAND_ICON,
+            //   },
+            //   name: "add-item",
+            // });
+
+            // group.addShape("marker", {
+            //   attrs: {
+            //     x: 80,
+            //     y: 52,
+            //     r: 6,
+            //     stroke: "#ff4d4f",
+            //     cursor: "pointer",
+            //     symbol: COLLAPSE_ICON,
+            //   },
+            //   name: "remove-item",
+            // });
+
+            if (cfg.label) {
+              group.addShape("text", {
+                attrs: {
+                  ...labelCfg.style,
+                  text: cfg.label,
+                  x: 50,
+                  y: 25,
+                },
+              });
+            }
+            return keyShape;
+          },
+          setState(name, value, item) {
+            if (name === 'collapsed') {
+              const marker = item.get('group').find(ele => ele.get('name') === 'collapse-icon');
+              const icon = value ? EXPAND_ICON : COLLAPSE_ICON
+              marker.attr('symbol', icon);
+            }
+          }
+        },
+        "rect"
+      );
+
+//自定义边
+      G6.registerEdge("flow-line", {
+        draw(cfg, group) {
+          const startPoint = cfg.startPoint;
+          const endPoint = cfg.endPoint;
+          const shape = group.addShape('path', {
+            attrs: {
+              stroke: '#1890ff',
+              path: [
+                ['M', startPoint.x, startPoint.y],
+                ['L', endPoint.x / 3 + (3 / 3) * startPoint.x, startPoint.y], // 三分之一处
+                ['L', endPoint.x / 3 + (3 / 3) * startPoint.x, endPoint.y], // 三分之二处
+                ['L', endPoint.x, endPoint.y],
+              ],
+            },
+            // must be assigned in G6 3.3 and later versions. it can be any value you want
+            name: 'path-shape',
+          });
+          return shape;
+        },
+      });
+//默认hover样式
+      const defaultStateStyles = {
+        hover: {
+          stroke: "#1890ff",
+          lineWidth: 2,
+        },
+      };
+//默认节点样式
+      const defaultNodeStyle = {
+        fill: "#fff",
+        stroke: "#1890ff",
+        radius: 3,
+      };
+//默认边样式
+      const defaultEdgeStyle = {
+        stroke: "#1890ff",
+        endArrow: {
+          path: "M 0,0 L 12, 6 L 9,0 L 12, -6 Z",
+          fill: "#1890ff",
+          d: -20,
+        },
+      };
+
+      const defaultLayout = {
+        type: "compactBox",
+        direction: "LR",
+        getId: function getId(d) {
+          return d.id;
+        },
+        getHeight: function getHeight() {
+          return 16;
+        },
+        getWidth: function getWidth() {
+          return 16;
+        },
+        getVGap: function getVGap() {
+          return 24;
+        },
+        getHGap: function getHGap() {
+          return 80;
+        },
+      };
+
+      const defaultLabelCfg = {
+        style: {
+          fill: "#000",
+          fontSize: 12,
+        },
+      };
+
+      
+
+      const width = $("#container").width();
+      const height = $("#container").height() || 500;
+
+      const minimap = new G6.Minimap({
+        size: [200, 120],
+      });
+//创建工具提示
+      const tooltip = new G6.Tooltip({
+        getContent(e) {
+          let depth = e.item.getModel().depth;
+          if(depth == 0) {
+            $(".g6-component-tooltip").css({display:'none'});
+            return ``;
+          }else {
+            $(".g6-component-tooltip").css({display:'block'});
+              return `<div style='width: 180px;'>
+                <ul id='menu'>
+                  <li title='1'>测试02</li>
+                  <li title='2'>测试02</li>
+                  <li>测试02</li>
+                  <li>测试02</li>
+                  <li>测试02</li>
+                </ul>
+              </div>`;
+          }
+          
+        },
+      });
+//创建树形结构
+      const graph = new G6.TreeGraph({
+        container: "container",
+        width,
+        height,
+        linkCenter: true,
+        plugins: [minimap,tooltip],
+        modes: {
+          default: [
+            "drag-canvas",
+            "zoom-canvas",
+          ],
+        },
+        defaultNode: {
+          type: "icon-node",
+          size: [120, 40],
+          style: defaultNodeStyle,
+          labelCfg: defaultLabelCfg,
+        },
+        defaultEdge: {
+          type:'flow-line',
+          style: defaultEdgeStyle,
+        },
+        nodeStateStyles: defaultStateStyles,
+        edgeStateStyles: defaultStateStyles,
+        layout: defaultLayout,
+      });
+
+      graph.data(data);
+      graph.render();
+      graph.fitView();
+//绑定事件
+      graph.on("node:mouseenter", (evt) => {
+        // console.log(evt.currentTarget.cfg.data);
+        const { item } = evt;
+        graph.setItemState(item, "hover", true);
+      });
+
+      graph.on("node:mouseleave", (evt) => {
+        const { item } = evt;
+        graph.setItemState(item, "hover", false);
+      });
+
+      graph.on("node:click", (evt) => {
+        const { item, target } = evt;
+        const targetType = target.get("type");
+        const name = target.get("name");
+        if (name === 'collapse-icon') {
+          item.getModel().collapsed = !item.getModel().collapsed;
+          graph.setItemState(item, 'collapsed', item.getModel().collapsed);
+          graph.layout();
+        }
+        if(name === 'reset') {
+
+          console.log('reset');
+        }
+        if(name === 'jump') {
+          console.log('jump');
+        }
+        // console.log(targetType)
+        // console.log(name)
+        // console.log(item.getModel())
+        // 增加元素
+        // if (targetType === "marker") {
+        //   const model = item.getModel();
+        //   if (name === "add-item") {
+        //     if (!model.children) {
+        //       model.children = [];
+        //     }
+        //     const id = `n-${Math.random()}`;
+        //     model.children.push({
+        //       id,
+        //       label: id.substr(0, 8),
+        //       leftIcon: {
+        //         style: {
+        //           fill: "#e6fffb",
+        //           stroke: "#e6fffb",
+        //         },
+        //         img:
+        //           "https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ",
+        //       },
+        //     });
+        //     graph.updateChild(model, model.id);
+        //   } else if (name === "remove-item") {
+        //     graph.removeChild(model.id);
+        //   }
+        // }
+      });
+
+    </script>
+
+  </body>
+</html>
