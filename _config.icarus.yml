@@ -199,7 +199,7 @@ widgets:
         # URL or path to the avatar image
         avatar: https://d300.paixin.com/thumbs/1004936/16836677/staff_1024.jpg
         # Whether show the rounded avatar image
-        avatar_rounded: false
+        avatar_rounded: true
         # Email address for the Gravatar
         gravatar: 
         # URL or path for the follow button
