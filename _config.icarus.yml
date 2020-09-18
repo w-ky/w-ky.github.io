@@ -191,13 +191,13 @@ widgets:
         position: left
         type: profile
         # Author name
-        author: Your name
+        author: Kyan
         # Author title
-        author_title: Your title
+        author_title: Kyan Blog
         # Author's current location
-        location: Your location
+        location: 杭州
         # URL or path to the avatar image
-        avatar: 
+        avatar: https://d300.paixin.com/thumbs/1004936/16836677/staff_1024.jpg
         # Whether show the rounded avatar image
         avatar_rounded: false
         # Email address for the Gravatar
@@ -258,8 +258,9 @@ widgets:
     # Google FeedBurner email subscription widget configurations
     -
         # Where should the widget be placed, left sidebar or right sidebar
-        position: left
-        type: subscribe_email
+        # 订阅更新
+        # position: left
+        # type: subscribe_email
         # Hint text under the email input
         description: 
         # Feedburner ID
@@ -267,8 +268,8 @@ widgets:
     # Google AdSense unit configurations
     -
         # Where should the widget be placed, left sidebar or right sidebar
-        position: left
-        type: adsense
+        # position: left
+        # type: adsense
         # AdSense client ID
         client_id: ''
         # AdSense AD unit ID
