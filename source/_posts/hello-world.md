@@ -37,7 +37,7 @@ $ hexo deploy
 ### kyan test
 
 ``` bash
-$ kyan test
+$ kyan first
 ```
 
 More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
