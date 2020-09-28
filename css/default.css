@@ -1418,9 +1418,6 @@ a.has-text-grey-lightest:focus {
     visibility: hidden !important;
   }
 }
-
-
-
 .is-marginless {
   margin: 0 !important;
 }
@@ -11473,4 +11470,3 @@ figure.highlight .section {
     padding: 1.5rem 1rem;
   }
 }
-
