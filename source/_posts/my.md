@@ -1,11 +1,10 @@
 ---
-title: Getting Started with Icarus
+title: 常用的正则规则
 cover: https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg
 ---
-Welcome to the Icarus documentation site! Icarus is a simple, delicate, and modern theme for the static site generator Hexo. It strives to be elegant in design while simple and straightforward to use. Its versatile and flexible configuration system enables power users lay out their sites to the finest details. Icarus also offers a wide range of plugins and widgets to meet your various customization and optimization needs. Moreover, its refreshed implementation enables better IDE support and third-party integration, which open to a sea of improvement possibilities.
+记录一些常用的正则，方便以后使用。
 
 <!--more-->
-## 常用的正则规则
 ```javascript
 const regExpConfig = {
   IDcard: /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/, // 身份证
