@@ -7,7 +7,7 @@ logo: https://d300.paixin.com/thumbs/1004936/16836677/staff_1024.jpg
 # Page metadata configurations
 head:
     # URL or path to the website's icon
-    favicon: /img/favicon.svg
+    favicon: https://static01.imgkr.com/temp/252874d3776d40ef85eaba827d746ef5.png
     # Open Graph metadata
     # https://hexo.io/docs/helpers.html#open-graph
     open_graph:
