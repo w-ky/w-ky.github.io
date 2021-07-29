@@ -1,6 +1,6 @@
 ---
 title: 常用的正则规则
-cover: https://blog.zhangruipeng.me/hexo-theme-icarus/gallery/covers/vector_landscape_1.svg
+cover: https://source.unsplash.com/random
 ---
 记录一些常用的正则，方便以后使用。
 
