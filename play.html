@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://tcsdk.com/player/tcplayer/release/v5.3.3/tcplayer.min.css"
+      rel="stylesheet"
+    />
+    <!--播放器脚本文件-->
+    <script src="https://tcsdk.com/player/tcplayer/release/v5.3.3/tcplayer.v5.3.3.min.js"></script>
+  </head>
+  <body>
+    <video
+      id="player-container-id"
+      width="414"
+      height="270"
+      preload="auto"
+      playsinline
+      webkit-playsinline
+    ></video
+    >;
+    <script>
+      const playUrl =
+        "webrtc://play.sliverbug.cloud/live/1?txSecret=7a09c7259d83bd65ea940c29b917219b&txTime=6908BAC0";
+
+      // player-container-id 为播放器容器 ID，必须与 html 中一致
+      var player = TCPlayer("player-container-id", {
+        sources: [
+          {
+            src: playUrl,
+          },
+        ],
+        licenseUrl:
+          "https://1308092666.trtcube-license.cn/license/v2/1308092666_1/v_cube.license", // license 地址，必传。参考准备工作部分，在视立方控制台申请 license 后可获得 licenseUrl
+      });
+      // player.src(url); // url 播放地址
+    </script>
+  </body>
+</html>
